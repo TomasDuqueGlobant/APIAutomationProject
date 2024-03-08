@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class ClientSteps {
@@ -37,17 +37,18 @@ public class ClientSteps {
 
     @When("I send a GET request to view all the clients")
     public void iSendAGetRequestToViewAllTheClients(){
+        response = clientRequest.getClients();
 
     }
 
     @Then("the response should have a status code of {int}")
-    public void theResponseShouldHaveAStatusCodeOf(Integer int1){
-
+    public void theResponseShouldHaveAStatusCodeOf(Integer statusCode){
+        Assert.assertEquals(statusCode.intValue(),response.statusCode());
     }
 
     @Then("validates the response with client list JSON schema")
     public void validatesTheResponseWithClientListJsonSchema(){
-
+        Assert.assertTrue(clientRequest.validateSchema(response,"schemas/clientListSchema.json"));
     }
 
 }

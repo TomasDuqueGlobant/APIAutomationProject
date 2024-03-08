@@ -1,7 +1,8 @@
 {
   "name": "Tomas",
   "lastName": "Duque",
-  "gender": "Man",
   "country": "Colombia",
-  "city": "Medellín"
+  "city": "Medellín",
+  "email": "tomas.duque@globant.com",
+  "phone": "123456789"
 }

@@ -15,7 +15,7 @@ public class ClientRequest extends BaseRequest{
     private String endpoint;
 
     public Response getClients(){
-        endpoint = "";
+        endpoint = "https://63b6dfe11907f863aa04ff81.mockapi.io/api/v1/clients";
         return requestGet(endpoint,createBaseHeaders());
     }
 
