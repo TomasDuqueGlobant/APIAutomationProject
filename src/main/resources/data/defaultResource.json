@@ -1,0 +1,9 @@
+{
+  "name": "Huracan Evo",
+  "trademark": "Lamborghini",
+  "stock": 1,
+  "price": 1000000.00,
+  "description": "Lamborghini Huracan Evo Spider",
+  "tags": "Luxury",
+  "is_active": true
+}
