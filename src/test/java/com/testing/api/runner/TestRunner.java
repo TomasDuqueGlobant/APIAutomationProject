@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features",
         glue = "com.testing.api.stepDefinitions",
         snippets = CucumberOptions.SnippetType.CAMELCASE,
-        monochrome = true,
         tags = "@Smoke",
         plugin = {"pretty:target/cucumber/cucumber.txt",
                     "html:target/cucumber/report",

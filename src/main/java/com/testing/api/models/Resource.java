@@ -17,6 +17,10 @@ public class Resource {
     private String price;
     private String description;
     private String tags;
-    private String is_active;
+    private String active;
     private String id;
+
+    public String getId() {
+        return id;
+    }
 }

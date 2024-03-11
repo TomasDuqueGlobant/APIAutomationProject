@@ -18,5 +18,15 @@ import lombok.NoArgsConstructor;
         private String email;
         private String phone;
         private String id;
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+
+
     }
+
 

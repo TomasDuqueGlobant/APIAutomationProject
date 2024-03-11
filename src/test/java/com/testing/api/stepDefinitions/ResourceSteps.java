@@ -18,11 +18,14 @@ public class ResourceSteps {
     private static final Logger logger = LogManager.getLogger(ClientSteps.class);
 
     private ResourceRequest resourceRequest = new ResourceRequest();
+    private CommonSteps commonSteps = new CommonSteps();
     private Response response;
 
     private Resource resource;
 
-
+    public ResourceSteps(CommonSteps commonSteps){
+        this.commonSteps = commonSteps;
+    }
 
     @Given("there are registered resources in the system")
     public void thereAreRegisteredResourcesInTheSystem() {
@@ -36,23 +39,42 @@ public class ResourceSteps {
             logger.info(response.statusCode());
             Assert.assertEquals(201,response.statusCode());
         }
+        commonSteps.setResponse(response);
     }
+
+    @Given("I retrieve the details of the latest resource")
+    public void iRetrieveTheDetailsOfTheLatestResource() {
+        response = resourceRequest.getResources();
+        List<Resource> resourceList = resourceRequest.getResourcesEntity(response);
+        if (!resourceList.isEmpty()) {
+            resource = resourceList.get(resourceList.size() - 1);
+        } else {
+            throw new IllegalStateException("No resources found.");
+        }
+        commonSteps.setResponse(response);
+
+    }
+
     @When("I send a GET request to view all the resources")
     public void iSendAGETRequestToViewAllTheResources() {
         response = resourceRequest.getResources();
-
+        commonSteps.setResponse(response);
+    }
+    @When("I send a PUT request to update the latest resource")
+    public void iSendAPUTRequestToUpdateTheLatestResource(String docString) {
+        if (resource == null || resource.getId() == null) {
+            throw new IllegalStateException("No last resource available for update.");
+        }
+        response = resourceRequest.updateResource(resource.getId(), docString);
+        commonSteps.setResponse(response);
     }
 
-    @Then("the response of resources should have a status code of {int}")
-    public void theResponseOfResourcesShouldHaveAStatusCodeOf(Integer statusCode) {
-        Assert.assertEquals(statusCode.intValue(),response.statusCode());
-    }
     @Then("validates the response with the resource list JSON schema")
     public void validatesTheResponseWithTheResourceListJSONSchema() {
         Assert.assertTrue(resourceRequest.validateSchema(response,"schemas/resourceListSchema.json"));
     }
+    @Then("the response should have the following details:")
+    public void theResponseShouldHaveTheFollowingDetails() {
 
-
-
-
+    }
 }

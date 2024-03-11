@@ -24,6 +24,11 @@ public class ResourceRequest extends BaseRequest{
         return requestPost(endpoint,createBaseHeaders(),resource);
     }
 
+    public Response updateResource(String id,  String requestBody){
+        endpoint = "https://63b6dfe11907f863aa04ff81.mockapi.io/api/v1/resources/" + id;
+        return requestPut(endpoint,createBaseHeaders(),requestBody);
+    }
+
     public Response createDefaultResource(){
         JsonFileReader jsonFileReader = new JsonFileReader();
         return this.createResource(jsonFileReader.getResourceByJson(Constants.DEFAULT_RESOURCE_FILE_PATH));

@@ -18,8 +18,19 @@ public class BaseRequest {
         return RestAssured.given().contentType(Constants.VALUE_CONTENT_TYPE).headers(headers).body(body).when().post(endpoint);
     }
 
-    protected Response requestPut(String endpoint, Map<String, ?> headers, Object body){
-        return RestAssured.given().contentType(Constants.VALUE_CONTENT_TYPE).headers(headers).body(body).when().put(endpoint);
+//    protected Response requestPut(String endpoint, Map<String, ?> headers, Object body){
+//        return RestAssured.given().contentType(Constants.VALUE_CONTENT_TYPE).headers(headers).body(body).when().put(endpoint);
+//    }
+
+    public Response requestPut(String endpoint, Map<String, String> headers, String requestBody) {
+        return RestAssured.given()
+                .headers(headers)
+                .body(requestBody)
+                .when()
+                .put(endpoint)
+                .then()
+                .extract()
+                .response();
     }
 
     protected Response requestDelete(String endpoint, Map<String, ?> headers){

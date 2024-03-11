@@ -26,7 +26,7 @@
         "type": "string"
       },
 
-      "is_active": {
+      "active": {
         "type": "boolean"
       },
 
@@ -34,7 +34,7 @@
         "type": "string"
       }
     },
-    "required": ["name","trademark","stock","price","description","tags","is_active","id"]
+    "required": ["name","trademark","stock","price","description","tags","active","id"]
 
 
   }
