@@ -21,11 +21,11 @@
         "stock": 1000,
         "price":99.99,
         "description": "description",
-        "tags": "NewTag"
+        "tags": "NewTag",
         "active": true
       }
       """
       Then the response should have a status code of 200
       And the response should have the following details:
         | name      | trademark      | stock| price | description   | tags     | active |
-        | <newName> | <NewTrademark> | 1000 | 99.99 | <description> | <NewTag> | <true>|
+        | NewName   | NewTradeMark   | 1000 | 99.99 | description   | NewTag   | true   |

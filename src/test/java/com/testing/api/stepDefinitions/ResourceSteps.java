@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 
 import java.util.List;
+import java.util.Map;
 
 public class ResourceSteps {
 
@@ -23,7 +24,7 @@ public class ResourceSteps {
 
     private Resource resource;
 
-    public ResourceSteps(CommonSteps commonSteps){
+    public ResourceSteps(CommonSteps commonSteps) {
         this.commonSteps = commonSteps;
     }
 
@@ -31,13 +32,13 @@ public class ResourceSteps {
     public void thereAreRegisteredResourcesInTheSystem() {
         response = resourceRequest.getResources();
         logger.info(response.jsonPath().prettify());
-        Assert.assertEquals(200,response.statusCode());
+        Assert.assertEquals(200, response.statusCode());
 
         List<Resource> resourceList = resourceRequest.getResourcesEntity(response);
-        if(resourceList.isEmpty()){
+        if (resourceList.isEmpty()) {
             response = resourceRequest.createDefaultResource();
             logger.info(response.statusCode());
-            Assert.assertEquals(201,response.statusCode());
+            Assert.assertEquals(201, response.statusCode());
         }
         commonSteps.setResponse(response);
     }
@@ -60,6 +61,7 @@ public class ResourceSteps {
         response = resourceRequest.getResources();
         commonSteps.setResponse(response);
     }
+
     @When("I send a PUT request to update the latest resource")
     public void iSendAPUTRequestToUpdateTheLatestResource(String docString) {
         if (resource == null || resource.getId() == null) {
@@ -71,10 +73,22 @@ public class ResourceSteps {
 
     @Then("validates the response with the resource list JSON schema")
     public void validatesTheResponseWithTheResourceListJSONSchema() {
-        Assert.assertTrue(resourceRequest.validateSchema(response,"schemas/resourceListSchema.json"));
+        Assert.assertTrue(resourceRequest.validateSchema(response, "schemas/resourceListSchema.json"));
     }
-    @Then("the response should have the following details:")
-    public void theResponseShouldHaveTheFollowingDetails() {
 
+    @Then("the response should have the following details:")
+    public void theResponseShouldHaveTheFollowingDetails(io.cucumber.datatable.DataTable dataTable) {
+
+        List<Map<String, String>> expectedDetails = dataTable.asMaps(String.class, String.class);
+        Map<String, Object> actualDetails = response.jsonPath().getMap("$");
+
+        for (Map<String, String> row : expectedDetails) {
+            for (String key : row.keySet()) {
+                String expectedValue = row.get(key);
+                Object actualValue = actualDetails.get(key);
+
+                Assert.assertEquals("El valor para " + key + " no coincide.", expectedValue, String.valueOf(actualValue));
+            }
+        }
     }
 }

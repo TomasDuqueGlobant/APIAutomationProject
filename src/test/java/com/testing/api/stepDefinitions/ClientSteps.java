@@ -80,8 +80,6 @@ public class ClientSteps {
         commonSteps.setResponse(response);
     }
 
-
-
     @Then("validates the response with client list JSON schema")
     public void validatesTheResponseWithClientListJsonSchema(){
         Assert.assertTrue(clientRequest.validateSchema(response,"schemas/clientListSchema.json"));
