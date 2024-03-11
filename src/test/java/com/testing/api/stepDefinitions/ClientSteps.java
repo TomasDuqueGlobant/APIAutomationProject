@@ -2,6 +2,8 @@ package com.testing.api.stepDefinitions;
 
 import com.testing.api.models.Client;
 import com.testing.api.requests.ClientRequest;
+import com.testing.api.utils.Constants;
+import com.testing.api.utils.JsonFileReader;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -48,18 +50,21 @@ public class ClientSteps {
 
     @Given("I have a client with the following details:")
     public void iHaveAClientWithTheFollowingDetails(io.cucumber.datatable.DataTable dataTable) {
+        JsonFileReader jsonFileReader = new JsonFileReader();
+        Client defaultClient = jsonFileReader.getClientByJson(Constants.DEFAULT_CLIENT_FILE_PATH);
+
         List<Map<String, String>> clientDetails = dataTable.asMaps(String.class, String.class);
         Map<String, String> details = clientDetails.get(0);
 
-        this.client = new Client(
-                details.get("name"),
-                details.get("lastName"),
-                details.get("country"),
-                details.get("city"),
-                details.get("email"),
-                details.get("phone"),
-                details.get("id")
-        );
+        if (details.containsKey("name")) defaultClient.setName(details.get("name"));
+        if (details.containsKey("lastName")) defaultClient.setLastName(details.get("lastName"));
+        if (details.containsKey("country")) defaultClient.setCountry(details.get("country"));
+        if (details.containsKey("city")) defaultClient.setCity(details.get("city"));
+        if (details.containsKey("email")) defaultClient.setEmail(details.get("email"));
+        if (details.containsKey("phone")) defaultClient.setPhone(details.get("phone"));
+
+
+        this.client = defaultClient;
     }
 
     @When("I send a GET request to view all the clients")
@@ -71,7 +76,7 @@ public class ClientSteps {
 
     @When("I send a POST request to create a client")
     public void iSendAPOSTRequestToCreateAClient() {
-        response = clientRequest.createDefaultClient();
+        response = clientRequest.createClient(client);
         commonSteps.setResponse(response);
     }
 
@@ -88,7 +93,13 @@ public class ClientSteps {
 
     @Then("the response should include the details of the created client")
     public void theResponseShouldIncludeTheDetailsOfTheCreatedClient() {
+        Client responseClient = response.as(Client.class);
 
-
+        Assert.assertEquals( this.client.getName(), responseClient.getName());
+        Assert.assertEquals( this.client.getLastName(), responseClient.getLastName());
+        Assert.assertEquals( this.client.getCountry(), responseClient.getCountry());
+        Assert.assertEquals( this.client.getCity(), responseClient.getCity());
+        Assert.assertEquals( this.client.getEmail(), responseClient.getEmail());
+        Assert.assertEquals( this.client.getPhone(), responseClient.getPhone());
     }
 }
